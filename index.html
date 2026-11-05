@@ -150,6 +150,29 @@
   #musicBtn { position:fixed; top:14px; right:14px; z-index:60; width:44px; height:44px; border-radius:50%; border:0; background:rgba(255,255,255,.85);
               font-size:20px; box-shadow:0 4px 12px rgba(0,0,0,.15); cursor:pointer; }
 
+  /* food game */
+  #foodScene { background:linear-gradient(#fff8ec,#ffeef2); }
+  .menu { display:grid; grid-template-columns:1fr 1fr; gap:14px; width:min(100%,420px); margin-top:24px; }
+  .dish { position:relative; background:#fff; border:0; border-radius:18px; padding:16px 8px; cursor:pointer; font:700 16px Nunito,sans-serif; color:var(--ink);
+          box-shadow:0 8px 20px rgba(80,40,60,.1); transition:transform .35s cubic-bezier(.3,1.5,.5,1), background .3s; }
+  .dish .e { display:block; font-size:44px; margin-bottom:6px; }
+  .dish small { display:block; font-weight:400; color:var(--muted); font-size:13px; }
+  .dish.yum { background:#e9fbef; outline:3px solid #5cc98a; }
+  .dish.yuck { background:#ffecec; animation:shake .4s; }
+  @keyframes shake { 25%{translate:-8px 0} 50%{translate:8px 0} 75%{translate:-5px 0} }
+  #foodMsg { min-height:52px; margin-top:20px; font-family:Caveat,cursive; font-size:25px; color:var(--rose); max-width:400px; }
+
+  /* coupons */
+  .coupons { display:grid; gap:12px; width:min(100%,420px); margin-top:22px; }
+  .coupon { position:relative; display:flex; gap:12px; align-items:center; text-align:left; background:#fff; border:2px dashed var(--rose-2); border-radius:14px;
+            padding:12px 14px; cursor:pointer; font:15px Nunito,sans-serif; color:var(--ink); overflow:hidden; }
+  .coupon .e { font-size:30px; }
+  .coupon b { display:block; font-size:16px; }
+  .coupon.used::after { content:"REDEEMED ✓"; position:absolute; right:10px; top:50%; translate:0 -50%; rotate:-12deg; border:3px solid var(--rose);
+                        color:var(--rose); font:800 15px Nunito,sans-serif; padding:2px 8px; border-radius:6px; background:rgba(255,255,255,.85); animation:stamp .35s; }
+  @keyframes stamp { from { scale:2.2; opacity:0; } }
+  #final.scroll { padding-top:40px; padding-bottom:60px; }
+
   @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none !important; transition:none !important; } }
 </style>
 </head>
@@ -193,7 +216,22 @@
     <div id="cutLine"></div>
   </div>
   <div class="hint" id="cakeHint">👆 swipe down</div>
-  <button class="btn hidden" id="toWish">Make a wish 🌠</button>
+  <button class="btn hidden" id="toFood">Wait… what's for dinner? 🍽️</button>
+</section>
+
+<!-- 3b. Food game -->
+<section class="scene" id="foodScene">
+  <div class="kicker">chef's special</div>
+  <h2>Birthday dinner <em>menu</em> 🍽️</h2>
+  <p class="sub">Choose wisely, birthday girl. The chef is watching 👀</p>
+  <div class="menu">
+    <button class="dish" data-d="guvar"><span class="e">🥒</span>ગવાર<small>Guvar sabzi</small></button>
+    <button class="dish" data-d="pizza"><span class="e">🍕</span>Pizza<small>Extra cheese</small></button>
+    <button class="dish" data-d="puri"><span class="e">🥟</span>Pani Puri<small>Teekha + meetha</small></button>
+    <button class="dish" data-d="valor"><span class="e">🥬</span>વાલોળ<small>Valor nu shaak</small></button>
+  </div>
+  <div id="foodMsg"></div>
+  <button class="btn hidden" id="toWish">Now make a wish 🌠</button>
 </section>
 
 <!-- 4/5. Wish -->
@@ -233,15 +271,26 @@
 </section>
 
 <!-- 8. Final -->
-<section class="scene" id="final">
+<section class="scene scroll" id="final">
   <div class="big">🧸🎈</div>
   <h1>Happy Birthday,<br><em>Nidhi!</em> 🎂</h1>
   <p class="sub">May this year bring you countless reasons to smile, and I promise to be at least half of them.</p>
   <div class="with-love" id="finalSign"></div>
+
+  <div class="kicker" style="margin-top:34px">your birthday gifts</div>
+  <h2 style="font-size:30px">Coupons 🎟️</h2>
+  <p class="sub">Tap to redeem. No expiry date. Non-refundable 😌</p>
+  <div class="coupons">
+    <button class="coupon" data-s="pop"><span class="e">🍕</span><span><b>1 large pizza</b>Guaranteed 0% guvar, 0% valor.</span></button>
+    <button class="coupon" data-s="shabash"><span class="e">🥟</span><span><b>Unlimited pani puri date</b>I'll stop counting after plate 50.</span></button>
+    <button class="coupon" data-s="evil"><span class="e">😈</span><span><b>1 late-night deep talk</b>On <i>that</i> topic. You know which one.</span></button>
+    <button class="coupon" data-s="rizz"><span class="e">🤗</span><span><b>1 extra-long hug</b>Redeemable anytime, anywhere.</span></button>
+  </div>
   <button class="btn soft" id="replay">Replay the surprise ↻</button>
 </section>
 
 <div id="lightbox"><img alt=""><p></p></div>
+<button id="musicBtn" aria-label="Mute sound" class="hidden">🔊</button>
 
 <script>
 /* ================= EDIT HERE ================= */
@@ -254,6 +303,10 @@ Another year of you, and somehow you just keep getting more beautiful. (And more
 Thank you for every laugh, every random late-night call, every time you stole my food and pretended you didn't.
 
 I can't believe I get to marry you. Out of everyone in the world, you chose this idiot, and I'm going to spend my whole life making sure you never regret it.
+
+I promise you a lifetime of pizza, pani puri, and a plate where ગવાર and વાલોળ will never, ever be seen 😌🍕
+
+And yes, I'm always ready for our deep talks… you know which topic 😈
 
 Today is all about you. Smile a lot, eat a lot of cake, and remember that someone out here loves you more than words on a website can say ❤️`;
 
@@ -296,6 +349,57 @@ const VIDEOS = [
 
 const $ = s => document.querySelector(s);
 let current = $("#s1");
+
+/* ---------- sound ---------- */
+let muted = false;
+const SFX = {};
+["paper","crickets","click","cheer","swoosh","pop","trombone","baigan","nonono","bloop","shabash","harp","star","shutter","dhol","rizz","evil","win"]
+  .forEach(n => { const a = new Audio(`sfx/${n}.mp3`); a.preload = "auto"; SFX[n] = a; });
+function sfx(n, vol = 0.8) {
+  if (muted || !SFX[n]) return;
+  const a = SFX[n].cloneNode(); a.volume = vol; a.play().catch(() => {});
+}
+const crickets = SFX.crickets; crickets.loop = true; crickets.volume = 0.5;
+
+// Soft music-box "Happy Birthday" (public-domain tune), synthesized, no file needed
+let ctx, master, musicOn = false, musicTimer;
+const N = { G4:392, A4:440, B4:493.9, C5:523.3, D5:587.3, E5:659.3, F5:698.5, G5:784 };
+const SONG = [["G4",.75],["G4",.25],["A4",1],["G4",1],["C5",1],["B4",2],
+              ["G4",.75],["G4",.25],["A4",1],["G4",1],["D5",1],["C5",2],
+              ["G4",.75],["G4",.25],["G5",1],["E5",1],["C5",1],["B4",1],["A4",2],
+              ["F5",.75],["F5",.25],["E5",1],["C5",1],["D5",1],["C5",3]];
+function bell(f, t, d) {
+  [1, 2.01].forEach((m, i) => {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = i ? "sine" : "triangle"; o.frequency.value = f * m;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(i ? .05 : .18, t + .02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + Math.max(d, .6) + .6);
+    o.connect(g).connect(master); o.start(t); o.stop(t + d + 1.4);
+  });
+}
+function playSong() {
+  if (!musicOn) return;
+  const beat = 0.5; let t = ctx.currentTime + 0.1;
+  SONG.forEach(([n, b]) => { bell(N[n], t, b * beat); t += b * beat; });
+  musicTimer = setTimeout(playSong, (t - ctx.currentTime + 1.5) * 1000);
+}
+function unlockAudio() {
+  if (ctx) return;
+  ctx = new (window.AudioContext || window.webkitAudioContext)();
+  master = ctx.createGain(); master.gain.value = 0.35; master.connect(ctx.destination);
+  $("#musicBtn").classList.remove("hidden");
+}
+function music(on) {
+  if (!ctx) return;
+  if (on && !musicOn && !muted) { musicOn = true; ctx.resume(); playSong(); }
+  if (!on) { musicOn = false; clearTimeout(musicTimer); }
+}
+let wantMusic = false;
+$("#musicBtn").onclick = () => {
+  muted = !muted;
+  $("#musicBtn").textContent = muted ? "🔇" : "🔊";
+  if (muted) { music(false); crickets.pause(); } else if (wantMusic) music(true);
+};
 function go(id) { current.classList.remove("active"); current = $(id); current.classList.add("active"); current.scrollTop = 0; }
 function hearts(n = 14, set = ["💖","💕","✨","🎈","🌸"]) {
   for (let i = 0; i < n; i++) setTimeout(() => {
@@ -315,8 +419,10 @@ function boom() {
 
 /* 1 → 2 */
 function openEnvelope() {
+  if ($("#env").classList.contains("open")) return;
+  unlockAudio(); sfx("paper");
   $("#env").classList.add("open"); hearts(8);
-  setTimeout(() => go("#room"), 900);
+  setTimeout(() => { go("#room"); if (!muted) crickets.play().catch(() => {}); }, 900);
 }
 $("#env").onclick = openEnvelope; $("#openBtn").onclick = openEnvelope;
 
@@ -333,6 +439,8 @@ $("#lightsBtn").onclick = () => {
   $("#roomTitle").innerHTML = "It's your day,<br><em>birthday girl</em> 🎉";
   $("#roomSub").textContent = "The whole room has been waiting just for you.";
   $("#lightsBtn").classList.add("hidden"); $("#toCake").classList.remove("hidden");
+  crickets.pause(); sfx("click"); setTimeout(() => sfx("cheer", .6), 250);
+  wantMusic = true; setTimeout(() => music(true), 1800);
   boom();
 };
 $("#toCake").onclick = () => go("#cakeScene");
@@ -359,9 +467,32 @@ function cutCake() {
   $("#cakeKicker").textContent = "yayyy";
   $("#cakeTitle").textContent = "You did it! 🎉";
   $("#cakeSub").textContent = "The first slice is always the sweetest one (after you).";
-  $("#cakeHint").classList.add("hidden"); $("#toWish").classList.remove("hidden");
+  $("#cakeHint").classList.add("hidden"); $("#toFood").classList.remove("hidden");
+  sfx("swoosh"); setTimeout(() => sfx("pop"), 300);
   boom();
 }
+$("#toFood").onclick = () => { sfx("bloop", .6); go("#foodScene"); };
+
+/* 3b food game */
+const FOOD = {
+  guvar: { good:false, s:["baigan","trombone"], msg:["ગવાર?? Never. Not even on your birthday 🤢", "Still no. The guvar has been banned 🚫", "Bas kar, it's running away from you too 😂"] },
+  valor: { good:false, s:["nonono"],            msg:["વાલોળ? The chef has been fired 😤", "Nice try. Valor is NOT on this menu 🙅‍♀️", "Arey! Leave the poor valor alone 😂"] },
+  pizza: { good:true,  s:["shabash"],           msg:["Correct answer! Extra cheese, zero guvar 🍕"] },
+  puri:  { good:true,  s:["win","shabash"],     msg:["Pani puri lover detected 💧 Unlimited refills approved!"] },
+};
+const tries = {};
+document.querySelectorAll(".dish").forEach(b => b.onclick = () => {
+  const k = b.dataset.d, f = FOOD[k], n = tries[k] = (tries[k] || 0) + 1;
+  $("#foodMsg").textContent = f.msg[Math.min(n, f.msg.length) - 1];
+  f.s.forEach((s, i) => setTimeout(() => sfx(s), i * 650));
+  if (f.good) {
+    b.classList.add("yum"); window.confetti && confetti({ particleCount:60, spread:70, origin:{ y:.7 } });
+    $("#toWish").classList.remove("hidden");
+  } else {
+    b.classList.remove("yuck"); void b.offsetWidth; b.classList.add("yuck");
+    if (n > 1) b.style.transform = `translate(${(Math.random() * 120 - 60) | 0}px, ${(Math.random() * 80 - 40) | 0}px) rotate(${(Math.random() * 30 - 15) | 0}deg)`;
+  }
+});
 $("#toWish").onclick = () => go("#wishScene");
 
 /* 4/5 wish */
@@ -373,11 +504,12 @@ $("#wishBtn").onclick = () => {
     $("#wishTitle").textContent = "Your wish is on its way…";
     $("#wishSub").textContent = "Somewhere, a tiny star just said yes.";
     $("#star").classList.add("shoot");
+    sfx("harp", .6); setTimeout(() => sfx("star", .7), 400);
     $("#wishBtn").classList.add("hidden");
     setTimeout(() => $("#toLetter").classList.remove("hidden"), 1400);
   }
 };
-$("#toLetter").onclick = () => { go("#letterScene"); typeLetter(); };
+$("#toLetter").onclick = () => { sfx("paper"); go("#letterScene"); typeLetter(); };
 
 /* 6 letter */
 let typed = false;
@@ -394,7 +526,8 @@ $("#letterScene").addEventListener("click", e => { // tap to skip typing
   if (e.target.id === "toMem" || !typed) return;
   if ($("#toMem").classList.contains("hidden")) { $("#letterText").textContent = LETTER; $("#letterSign").textContent = SIGN; $("#toMem").classList.remove("hidden"); typed = "skip"; }
 });
-$("#toMem").onclick = e => { e.stopPropagation(); go("#memories"); buildMemories(); hearts(10); };
+// music pauses here so the videos can be heard
+$("#toMem").onclick = e => { e.stopPropagation(); sfx("shutter"); music(false); go("#memories"); buildMemories(); hearts(10); };
 
 /* 7 memories */
 let built = false;
@@ -425,12 +558,19 @@ function buildMemories() {
   });
 }
 const lb = $("#lightbox");
-function openLight(src, cap) { lb.querySelector("img").src = src; lb.querySelector("p").textContent = cap; lb.classList.add("on"); }
+function openLight(src, cap) { sfx("shutter", .6); lb.querySelector("img").src = src; lb.querySelector("p").textContent = cap; lb.classList.add("on"); }
 lb.onclick = () => lb.classList.remove("on");
 
 /* 8 final */
 $("#finalSign").textContent = SIGN;
-$("#toFinal").onclick = () => { go("#final"); boom(); hearts(24); setTimeout(boom, 1200); };
+$("#toFinal").onclick = () => {
+  go("#final"); boom(); hearts(24); setTimeout(boom, 1200);
+  sfx("dhol"); setTimeout(() => sfx("cheer", .6), 600); setTimeout(() => music(true), 6500);
+};
+document.querySelectorAll(".coupon").forEach(c => c.onclick = () => {
+  if (c.classList.contains("used")) return;
+  c.classList.add("used"); sfx(c.dataset.s); hearts(6, [c.querySelector(".e").textContent]);
+});
 $("#replay").onclick = () => location.reload();
 </script>
 </body>
