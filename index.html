@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Happy Birthday Nidhi 🎂</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<style>
+  :root { --pink:#ff4f8b; --purple:#7b2ff7; --gold:#ffd166; --bg:#1a0b2e; --text:#fff; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:Poppins,sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden;
+         background-image:radial-gradient(circle at 20% 10%,#3a1460 0,transparent 40%),radial-gradient(circle at 80% 90%,#5a0f3c 0,transparent 40%); min-height:100vh; }
+  h1,h2 { font-family:Pacifico,cursive; font-weight:400; }
+  section { max-width:900px; margin:0 auto; padding:64px 16px; text-align:center; }
+  h2 { font-size:clamp(28px,6vw,44px); margin-bottom:24px; color:var(--gold); }
+
+  /* gift intro */
+  #intro { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px;
+           background:var(--bg); z-index:10; transition:opacity .8s; padding:16px; text-align:center; }
+  #intro.gone { opacity:0; pointer-events:none; }
+  #gift { font-size:120px; cursor:pointer; animation:wiggle 1.2s infinite; user-select:none; background:none; border:0; }
+  @keyframes wiggle { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-12deg)} 75%{transform:rotate(12deg)} }
+  #intro p { font-size:20px; opacity:.85; }
+
+  #main { display:none; }
+  #main.show { display:block; }
+  .hero h1 { font-size:clamp(44px,11vw,96px); background:linear-gradient(90deg,var(--gold),var(--pink),#c084fc);
+             -webkit-background-clip:text; background-clip:text; color:transparent; line-height:1.3; }
+  .hero .date { margin-top:8px; font-size:18px; opacity:.8; letter-spacing:2px; }
+  #typed { margin:32px auto 0; max-width:640px; font-size:clamp(17px,4vw,21px); line-height:1.7; min-height:6em; white-space:pre-line; }
+  #typed::after { content:"|"; animation:blink 1s infinite; }
+  @keyframes blink { 50%{opacity:0} }
+
+  .gallery { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:20px; }
+  .polaroid { background:#fff; color:#333; padding:10px 10px 16px; border-radius:4px; box-shadow:0 10px 25px rgba(0,0,0,.4);
+              transform:rotate(var(--r)); transition:transform .3s; }
+  .polaroid:hover { transform:rotate(0) scale(1.05); z-index:2; }
+  .polaroid img { width:100%; aspect-ratio:1; object-fit:cover; display:block; background:#ddd; }
+  .polaroid p { margin-top:10px; font-size:15px; font-family:Pacifico,cursive; }
+
+  .videos { display:grid; gap:24px; }
+  .video { background:rgba(255,255,255,.06); border-radius:16px; padding:12px; }
+  .video iframe, .video video { width:100%; aspect-ratio:16/9; border:0; border-radius:10px; background:#000; }
+  .video p { margin-top:10px; }
+
+  /* cake */
+  .cake { position:relative; width:220px; height:200px; margin:40px auto 16px; }
+  .layer { position:absolute; left:0; right:0; border-radius:12px; }
+  .l1 { bottom:0; height:70px; background:#ff8fab; }
+  .l2 { bottom:70px; height:60px; left:20px; right:20px; background:#ffc2d1; }
+  .candles { position:absolute; bottom:130px; left:0; right:0; display:flex; justify-content:center; gap:22px; }
+  .candle { width:10px; height:40px; background:repeating-linear-gradient(45deg,#fff 0 6px,var(--pink) 6px 12px); position:relative; border-radius:3px; }
+  .flame { position:absolute; top:-22px; left:-3px; width:16px; height:22px; background:radial-gradient(#fff6a0,#ff9f1c);
+           border-radius:50% 50% 50% 50%/60% 60% 40% 40%; animation:flick .3s infinite alternate; }
+  .out .flame { display:none; }
+  @keyframes flick { to{transform:scale(1.1) rotate(4deg)} }
+  button.btn { font:600 17px Poppins,sans-serif; padding:14px 28px; border:0; border-radius:999px; cursor:pointer; color:#fff;
+               background:linear-gradient(90deg,var(--pink),var(--purple)); box-shadow:0 8px 20px rgba(255,79,139,.4); }
+  #wish { margin-top:20px; font-size:20px; min-height:1.5em; }
+
+  .final h2 { font-size:clamp(32px,8vw,60px); }
+  .final p { font-size:20px; line-height:1.7; }
+  footer { text-align:center; padding:32px 16px 48px; opacity:.6; }
+
+  .float { position:fixed; bottom:-60px; font-size:32px; pointer-events:none; animation:up linear forwards; z-index:1; }
+  @keyframes up { to{transform:translateY(-115vh) rotate(30deg); opacity:.2} }
+</style>
+</head>
+<body>
+
+<div id="intro">
+  <p>Hey Nidhi… someone left something for you 👀</p>
+  <button id="gift" aria-label="Open your gift">🎁</button>
+  <p>Tap the gift</p>
+</div>
+
+<div id="main">
+  <section class="hero">
+    <h1>Happy Birthday Nidhi!</h1>
+    <div class="date">6 · NOVEMBER</div>
+    <div id="typed"></div>
+  </section>
+
+  <section>
+    <h2>Evidence File 📸</h2>
+    <div class="gallery" id="gallery"></div>
+  </section>
+
+  <section>
+    <h2>Now Playing 🎬</h2>
+    <div class="videos" id="videos"></div>
+  </section>
+
+  <section>
+    <h2>Make a wish 🎂</h2>
+    <div class="cake" id="cake">
+      <div class="candles"><div class="candle"><div class="flame"></div></div><div class="candle"><div class="flame"></div></div><div class="candle"><div class="flame"></div></div></div>
+      <div class="layer l2"></div><div class="layer l1"></div>
+    </div>
+    <button class="btn" id="blow">Blow the candles 🌬️</button>
+    <div id="wish"></div>
+  </section>
+
+  <section class="final">
+    <h2>One last thing…</h2>
+    <p id="finalMsg"></p>
+  </section>
+
+  <footer>Made with ❤️ (and zero sleep) just for you</footer>
+</div>
+
+<script>
+/* ====== EDIT ONLY THIS PART ====== */
+const MESSAGE = `Happy Birthday to the one person who can be annoying and amazing at the same time 😌
+Another year older, but still not wiser 😂
+Thank you for all the laughs, the chaos and the memories.
+Scroll down… I have proof of everything 👇`;
+
+const FINAL = `No matter how many birthdays come, you'll always be special.
+Stay crazy, stay happy, and keep smiling like that 💖
+Happy Birthday Nidhi! 🎉`;
+
+// Google Drive files: share "Anyone with the link", then paste the ID
+// (the part between /d/ and /view in the link).
+const PHOTOS = [
+  // { id: "DRIVE_FILE_ID", caption: "When the food arrives 🍕" },
+];
+const VIDEOS = [
+  // { id: "DRIVE_FILE_ID", caption: "This one never gets old 😂" },
+];
+/* ================================== */
+
+const $ = s => document.querySelector(s);
+const emojis = ["🎈","🎉","💖","✨","🎂","🥳"];
+
+function burst() {
+  confetti({ particleCount:160, spread:100, origin:{ y:.6 } });
+  setTimeout(() => confetti({ particleCount:80, angle:60, spread:70, origin:{ x:0 } }), 250);
+  setTimeout(() => confetti({ particleCount:80, angle:120, spread:70, origin:{ x:1 } }), 400);
+}
+
+function floaty() {
+  const e = document.createElement("div");
+  e.className = "float";
+  e.textContent = emojis[Math.random() * emojis.length | 0];
+  e.style.left = Math.random() * 100 + "vw";
+  e.style.animationDuration = 6 + Math.random() * 6 + "s";
+  document.body.appendChild(e);
+  setTimeout(() => e.remove(), 12000);
+}
+
+function type(el, text, i = 0) {
+  if (i > text.length) return;
+  el.textContent = text.slice(0, i);
+  setTimeout(() => type(el, text, i + 1), 45);
+}
+
+function render() {
+  const g = $("#gallery");
+  if (!PHOTOS.length) g.innerHTML = "<p>Photos loading soon… 👀</p>";
+  PHOTOS.forEach(p => {
+    const d = document.createElement("div");
+    d.className = "polaroid";
+    d.style.setProperty("--r", (Math.random() * 8 - 4) + "deg");
+    d.innerHTML = `<img loading="lazy" alt=""><p></p>`;
+    d.querySelector("img").src = `https://drive.google.com/thumbnail?id=${p.id}&sz=w1000`;
+    d.querySelector("p").textContent = p.caption;
+    g.appendChild(d);
+  });
+  const v = $("#videos");
+  VIDEOS.forEach(x => {
+    const d = document.createElement("div");
+    d.className = "video";
+    d.innerHTML = `<iframe allow="autoplay" allowfullscreen loading="lazy"></iframe><p></p>`;
+    d.querySelector("iframe").src = `https://drive.google.com/file/d/${x.id}/preview`;
+    d.querySelector("p").textContent = x.caption;
+    v.appendChild(d);
+  });
+}
+
+$("#gift").onclick = () => {
+  $("#intro").classList.add("gone");
+  $("#main").classList.add("show");
+  burst();
+  type($("#typed"), MESSAGE);
+  setInterval(floaty, 900);
+};
+
+$("#blow").onclick = () => {
+  $("#cake").classList.add("out");
+  $("#blow").style.display = "none";
+  $("#wish").textContent = "Wish granted ✨ (terms & conditions apply 😜)";
+  burst();
+};
+
+$("#finalMsg").textContent = FINAL;
+render();
+</script>
+</body>
+</html>
